@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 echo "System will install server features"
-echo  "192.168.10.10 LB0 lb0
+echo  "127.0.0.1 lb0 LB0
+			192.168.10.10 LB0 lb0
 			192.168.10.9 puppet PUPPET">>/etc/hosts
 echo "System Upgrades repositories"
 sudo apt-get update
@@ -17,7 +18,16 @@ server = 192.168.10.9
 logdir=/var/log/puppet
 vardir=/var/lib/puppet
 rundir=/var/run">/etc/puppet/puppetd.conf
+ sudo echo "# Defaults for puppet - sourced by /etc/init.d/puppet
 
-sudo screen -dmS pupet puppetd --server puppet --waitforcert 3600 --test
+# Start puppet on boot?
+START=yes
+
+# Startup options
+DAEMON_OPTS=""
+
+">/etc/default/puppet
+sudo /etc/init.d/puppet start
+
 
 
