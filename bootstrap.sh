@@ -112,6 +112,6 @@ sudo echo "<VirtualHost *:80>
 
 ">/etc/puppet/modules/apache/nmc.conf
 sudo service puppetmaster restart
-sudo puppetca --sign lb0.kapsch.co.at
+sudo puppetca --sign lb0
 
 
