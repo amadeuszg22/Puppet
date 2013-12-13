@@ -9,6 +9,19 @@ apt-get install libopenssl-ruby rdoc irb1.8 libopenssl-ruby1.8 libreadline-ruby1
 sudo apt-get install puppet -y
 sudo apt-get install puppetmaster -y
 sudo apt-get install git -y
+sudo echo "package {
+    'apache2':
+        ensure => installed
+}
+
+service {
+    'apache2':
+        ensure => true,
+        enable => true,
+        require => Package['apache2']
+}">/etc/puppet/manifests/site.pp
+sudo echo "node 'lb0.kapsch.co.at' {
+   include apache2
+}">/etc/puppet/manifests/nodes.pp
+sudo service puppetmaster restart
 sudo puppetca --sign lb0.kapsch.co.at
-
-
