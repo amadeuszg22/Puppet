@@ -37,37 +37,37 @@ package {
         ensure => installed
 }
 
-exec { "proxy_balancer":
+exec { 'proxy_balancer':
         notify => Service["apache2"],
-        command => "/usr/sbin/a2enmod proxy_balancer",
+        command => '/usr/sbin/a2enmod proxy_balancer',
         require => Package["apache2"],
     }
 
- exec { "proxy_http":
+ exec { 'proxy_http':
         notify => Service["apache2"],
-        command => "/usr/sbin/a2enmod proxy_http",
+        command => '/usr/sbin/a2enmod proxy_http',
         require => Package["apache2"],
     }
 
-exec { "mem_cache":
+exec { 'mem_cache':
         notify => Service["apache2"],
-        command => "/usr/sbin/a2enmod mem_cache",
+        command => '/usr/sbin/a2enmod mem_cache',
         require => Package["apache2"],
     }
-file {"/etc/apache2/sites-enabled/nmc.conf":
+file {'/etc/apache2/sites-enabled/nmc.conf':
       ensure  => present,
-      content => template("/etc/puppet/modules/apache/nmc.conf"),
+      content => template('/etc/puppet/modules/apache/nmc.conf'),
     }
-exec { "rm_def":
+exec { 'rm_def':
         notify => Service["apache2"],
-        command => "/bin/rm /etc/apache2/sites-enabled/000-default",
+        command => '/bin/rm /etc/apache2/sites-enabled/000-default',
        require => Package["apache2"],
     }
 
-exec { "reset_apache":
+exec { 'reset_apache':
         notify => Service["apache2"],
-        command => "/etc/init.d/apache2 restart",
-		    require => Package["apache2"],
+        command => '/etc/init.d/apache2 restart',
+        require => Package["apache2"],
     }
 		">/etc/puppet/manifests/site.pp
 sudo echo "node 'lb0.kapsch.co.at' {
