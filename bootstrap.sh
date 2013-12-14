@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "System will install server features"
-echo  "192.168.10.10 LB0 lb0">>/etc/hosts
+echo  "192.168.10.10 lb0.kapch.co.at">>/etc/hosts
 echo "System Upgrades repositories"
 sudo apt-get update
 echo "System install master of puppets"
@@ -111,7 +111,7 @@ exec { 'app':
 	require => Package[apache2],
     }
     ">/etc/puppet/manifests/site.pp
-sudo echo "node 'lb0' {
+sudo echo "node 'lb0.kapsch.co.at' {
    include apache2
    include php5
  include libapache2-mod-auth-mysql
@@ -162,6 +162,6 @@ sudo echo "<VirtualHost *:80>
 
 ">/etc/puppet/modules/apache/nmc.conf
 sudo service puppetmaster restart
-sudo puppetca --sign lb0
+sudo puppetca --sign lb0.kapsch.co.at
 
 
