@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 echo "System will install server features"
-echo  "127.0.0.1 lb0 LB0
-			192.168.10.10 LB0 lb0
+echo  "127.0.0.1 lb0.kapsch.co.at LB0
+			192.168.10.10 lb0.kapsch.co.at LB0
 			192.168.10.9 puppet PUPPET">>/etc/hosts
 echo "System Upgrades repositories"
 sudo apt-get update
