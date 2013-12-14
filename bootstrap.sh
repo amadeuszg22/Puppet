@@ -89,7 +89,7 @@ exec { 'reset_apache':
 		
 exec { 'nfs_conf':
         notify => Service[apache2],
-        command => '/bin/echo "/var/www/ (rw,sync,subtree_check)">>/etc/exports',
+        command => '/bin/echo '/var/www/ (rw,sync,subtree_check)'>>/etc/exports',
         require => Package[nfs-kernel-server],
     }
 exec { 'nfs_rest':
