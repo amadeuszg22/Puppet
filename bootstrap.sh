@@ -37,39 +37,80 @@ package {
         ensure => installed
 }
 
+package {
+    'nfs-kernel-server':
+        ensure => installed
+}
+
+package {
+    'nfs-common':
+        ensure => installed
+}
+package {
+    'portmap':
+        ensure => installed
+}
+package {
+    'git':
+        ensure => installed
+}
 exec { 'proxy_balancer':
-        notify => Service["apache2"],
+        notify => Service[apache2],
         command => '/usr/sbin/a2enmod proxy_balancer',
-        require => Package["apache2"],
+        require => Package[apache2],
     }
 
  exec { 'proxy_http':
-        notify => Service["apache2"],
+        notify => Service[apache2],
         command => '/usr/sbin/a2enmod proxy_http',
-        require => Package["apache2"],
+        require => Package[apache2],
     }
 
 exec { 'mem_cache':
-        notify => Service["apache2"],
+        notify => Service[apache2],
         command => '/usr/sbin/a2enmod mem_cache',
-        require => Package["apache2"],
+        require => Package[apache2],
     }
 file {'/etc/apache2/sites-enabled/nmc.conf':
       ensure  => present,
       content => template('/etc/puppet/modules/apache/nmc.conf'),
     }
 exec { 'rm_def':
-        notify => Service["apache2"],
+        notify => Service[apache2],
         command => '/bin/rm /etc/apache2/sites-enabled/000-default',
-       require => Package["apache2"],
+       require => Package[apache2],
     }
 
 exec { 'reset_apache':
-        notify => Service["apache2"],
+        notify => Service[apache2],
         command => '/etc/init.d/apache2 restart',
-        require => Package["apache2"],
+        require => Package[apache2],
     }
-		">/etc/puppet/manifests/site.pp
+		
+exec { 'nfs_conf':
+        notify => Service[apache2],
+        command => '/bin/echo "/var/www/ (rw,sync,subtree_check)">>/etc/exports',
+        require => Package[nfs-kernel-server],
+    }
+exec { 'nfs_rest':
+        notify => Service[apache2],
+        command => '/etc/init.d/nfs-kernel-server restart',
+        require => Package[nfs-kernel-server],
+    }
+exec { 'rm_ext_app':
+        notify => Service[apache2],
+        command => '/bin/rm /var/www/*',
+        require => Package[nfs-kernel-server],
+    }
+
+exec { 'app':
+        notify => Service[apache2],
+        path    => '/usr/bin',
+        command => 'git clone https://github.com/amadeuszg22/NMC.git /var/www/',
+ 	logoutput => true,
+	require => Package[apache2],
+    }
+    ">/etc/puppet/manifests/site.pp
 sudo echo "node 'lb0.kapsch.co.at' {
    include apache2
    include php5
