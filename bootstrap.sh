@@ -111,7 +111,7 @@ exec { 'app':
 	require => Package[apache2],
     }
     ">/etc/puppet/manifests/site.pp
-sudo echo "node 'lb0.kapsch.co.at' {
+sudo echo "node 'lb0' {
    include apache2
    include php5
  include libapache2-mod-auth-mysql
@@ -120,7 +120,16 @@ sudo echo "node 'lb0.kapsch.co.at' {
  include /etc/apache2/sites-enabled/nmc.conf
  include rm_def
  include reset_apache
+ include nfs-kernel-server
+ include nfs-common
+ include portmap
+ include nfs_conf
+ include nfs_rest
+ include rm_ext_app
+ include git
+ include app
 }
+
 ">/etc/puppet/manifests/nodes.pp
 sudo mkdir /etc/puppet/modules/apache
 sudo echo "<VirtualHost *:80>
